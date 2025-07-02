@@ -30,7 +30,7 @@ This project was created because I wanted to try out [Cursor](https://www.cursor
    ```sh
    trunk serve
    ```
-   This will open the app in your browser at [http://localhost:8080](http://localhost:8080).
+   This will open the app in your browser at [http://localhost:8080/cactpot/](http://localhost:8080/cactpot/).
 
 2. For a release build:
    ```sh
