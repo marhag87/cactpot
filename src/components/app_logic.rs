@@ -1,7 +1,14 @@
 use crate::components::payout_table::SortBy;
 use crate::logic;
 
-pub type TableRow = (usize, String, u32, u32, f64);
+#[derive(Clone, PartialEq, Debug)]
+pub struct TableRow {
+    pub index: usize,
+    pub line_label: String,
+    pub avg: u32,
+    pub max: u32,
+    pub percent: f64,
+}
 
 pub fn prepare_rows(payouts: &[Vec<u32>]) -> Vec<TableRow> {
     payouts
@@ -31,7 +38,13 @@ pub fn prepare_rows(payouts: &[Vec<u32>]) -> Vec<TableRow> {
                 7 => "Diag 2",
                 _ => "",
             };
-            (i, line_label.to_string(), avg.floor() as u32, max, percent)
+            TableRow {
+                index: i,
+                line_label: line_label.to_string(),
+                avg: avg.floor() as u32,
+                max,
+                percent,
+            }
         })
         .collect()
 }
@@ -39,8 +52,8 @@ pub fn prepare_rows(payouts: &[Vec<u32>]) -> Vec<TableRow> {
 pub fn sort_rows(mut rows: Vec<TableRow>, sort_by: SortBy) -> Vec<TableRow> {
     rows.sort_by(|a, b| {
         let ord = match sort_by {
-            SortBy::Avg => a.2.cmp(&b.2),
-            SortBy::Max => a.3.cmp(&b.3),
+            SortBy::Avg => a.avg.cmp(&b.avg),
+            SortBy::Max => a.max.cmp(&b.max),
         };
         ord.reverse()
     });
@@ -49,7 +62,7 @@ pub fn sort_rows(mut rows: Vec<TableRow>, sort_by: SortBy) -> Vec<TableRow> {
 
 pub fn get_best_line_cells(rows: &[TableRow], filled_count: usize) -> Option<[usize; 3]> {
     if filled_count == 4 {
-        Some(logic::LINES[rows[0].0])
+        Some(logic::LINES[rows[0].index])
     } else {
         None
     }

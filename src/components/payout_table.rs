@@ -1,3 +1,4 @@
+use crate::components::app_logic::TableRow;
 use yew::prelude::*;
 
 #[derive(PartialEq, Eq, Clone, Copy)]
@@ -8,7 +9,7 @@ pub enum SortBy {
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct PayoutTableProps {
-    pub rows: Vec<(usize, String, u32, u32, f64)>,
+    pub rows: Vec<TableRow>,
     pub sort_by: SortBy,
     pub set_sort: Callback<SortBy>,
 }
@@ -40,13 +41,13 @@ pub fn payout_table(props: &PayoutTableProps) -> Html {
                 </tr>
             </thead>
             <tbody>
-                { props.rows.iter().map(|(_i, line_label, avg, max, percent)| {
+                { props.rows.iter().map(|row| {
                     html! {
                         <tr>
-                            <td>{ line_label }</td>
-                            <td>{ avg }</td>
-                            <td>{ max }</td>
-                            <td>{ format!("{:.0}%", percent) }</td>
+                            <td>{ &row.line_label }</td>
+                            <td>{ row.avg }</td>
+                            <td>{ row.max }</td>
+                            <td>{ format!("{:.0}%", row.percent) }</td>
                         </tr>
                     }
                 }).collect::<Html>() }
