@@ -71,6 +71,13 @@ fn app() -> Html {
         })
     };
 
+    let on_reset = {
+        let numbers = numbers.clone();
+        Callback::from(move |_| {
+            numbers.set(vec![None; NUM_CELLS]);
+        })
+    };
+
     let filled_count = numbers.iter().filter(|n| n.is_some()).count();
     let max_inputs_reached = filled_count >= 4;
 
@@ -139,85 +146,88 @@ fn app() -> Html {
     let best_line_cells = best_line_indices.map(|idx| logic::LINES[idx]);
 
     html! {
-        <div class={classes!("cactpot-flex")}> 
-            <div>
-                <div class={classes!("cactpot-grid")}> 
-                    { (0..NUM_CELLS).map(|i| {
-                        let numbers = numbers.clone();
-                        let on_wheel = on_wheel.clone();
-                        let on_clear = on_clear.clone();
-                        let value = numbers[i];
-                        let is_empty = value.is_none();
-                        let onwheel = if !max_inputs_reached || !is_empty {
+        <div class={classes!("cactpot-vertical-center")}> 
+            <div class={classes!("cactpot-flex")}> 
+                <div class={classes!("cactpot-grid-container")}> 
+                    <div class={classes!("cactpot-grid")}> 
+                        { (0..NUM_CELLS).map(|i| {
+                            let numbers = numbers.clone();
                             let on_wheel = on_wheel.clone();
-                            Callback::from(move |e: web_sys::WheelEvent| {
-                                e.prevent_default();
-                                let delta = e.delta_y() as i32;
-                                on_wheel.emit((i, delta));
-                            })
-                        } else {
-                            Callback::from(|e: web_sys::WheelEvent| {
-                                e.prevent_default();
-                            })
-                        };
-                        let oncontextmenu = if !max_inputs_reached || !is_empty {
                             let on_clear = on_clear.clone();
-                            Callback::from(move |e: web_sys::MouseEvent| {
-                                e.prevent_default();
-                                on_clear.emit(i);
-                            })
-                        } else {
-                            Callback::from(|e: web_sys::MouseEvent| {
-                                e.prevent_default();
-                            })
-                        };
-                        let is_best = best_line_cells.map_or(false, |line| line.contains(&i));
-                        let cell_class = if is_best { classes!("cactpot-cell", "cactpot-best-cell") } else { classes!("cactpot-cell") };
-                        html! {
-                            <div class={cell_class}
-                                 tabindex="0"
-                                 onwheel={onwheel}
-                                 oncontextmenu={oncontextmenu}>
-                                { value.map(|n| n.to_string()).unwrap_or_default() }
-                            </div>
-                        }
-                    }).collect::<Html>() }
-                </div>
-            </div>
-            <div class={classes!("cactpot-table-container")}> 
-                <table class={classes!("cactpot-payout-table")}> 
-                    <colgroup>
-                        <col class="line" />
-                        <col class="avg" />
-                        <col class="max" />
-                        <col class="maxpct" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>{"Line"}</th>
-                            <th onclick={sort_by_avg} class={classes!("cactpot-sort-btn")}>
-                                {"Avg"}
-                            </th>
-                            <th onclick={sort_by_max} class={classes!("cactpot-sort-btn")}>
-                                {"Max"}
-                            </th>
-                            <th>{"Max %"}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { rows.into_iter().map(|(_i, line_label, avg, max, percent)| {
+                            let value = numbers[i];
+                            let is_empty = value.is_none();
+                            let onwheel = if !max_inputs_reached || !is_empty {
+                                let on_wheel = on_wheel.clone();
+                                Callback::from(move |e: web_sys::WheelEvent| {
+                                    e.prevent_default();
+                                    let delta = e.delta_y() as i32;
+                                    on_wheel.emit((i, delta));
+                                })
+                            } else {
+                                Callback::from(|e: web_sys::WheelEvent| {
+                                    e.prevent_default();
+                                })
+                            };
+                            let oncontextmenu = if !max_inputs_reached || !is_empty {
+                                let on_clear = on_clear.clone();
+                                Callback::from(move |e: web_sys::MouseEvent| {
+                                    e.prevent_default();
+                                    on_clear.emit(i);
+                                })
+                            } else {
+                                Callback::from(|e: web_sys::MouseEvent| {
+                                    e.prevent_default();
+                                })
+                            };
+                            let is_best = best_line_cells.map_or(false, |line| line.contains(&i));
+                            let cell_class = if is_best { classes!("cactpot-cell", "cactpot-best-cell") } else { classes!("cactpot-cell") };
                             html! {
-                                <tr>
-                                    <td>{ line_label }</td>
-                                    <td>{ avg }</td>
-                                    <td>{ max }</td>
-                                    <td>{ format!("{:.0}%", percent) }</td>
-                                </tr>
+                                <div class={cell_class}
+                                     tabindex="0"
+                                     onwheel={onwheel}
+                                     oncontextmenu={oncontextmenu}>
+                                    { value.map(|n| n.to_string()).unwrap_or_default() }
+                                </div>
                             }
                         }).collect::<Html>() }
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+                <div class={classes!("cactpot-table-container")}> 
+                    <table class={classes!("cactpot-payout-table")}> 
+                        <colgroup>
+                            <col class="line" />
+                            <col class="avg" />
+                            <col class="max" />
+                            <col class="maxpct" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>{"Line"}</th>
+                                <th onclick={sort_by_avg} class={classes!("cactpot-sort-btn")}> 
+                                    {"Avg"}
+                                </th>
+                                <th onclick={sort_by_max} class={classes!("cactpot-sort-btn")}> 
+                                    {"Max"}
+                                </th>
+                                <th>{"Max %"}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { rows.into_iter().map(|(_i, line_label, avg, max, percent)| {
+                                html! {
+                                    <tr>
+                                        <td>{ line_label }</td>
+                                        <td>{ avg }</td>
+                                        <td>{ max }</td>
+                                        <td>{ format!("{:.0}%", percent) }</td>
+                                    </tr>
+                                }
+                            }).collect::<Html>() }
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <button onclick={on_reset} class={classes!("cactpot-reset-btn")}>{"Reset"}</button>
         </div>
     }
 }
