@@ -89,7 +89,7 @@ pub fn grid(props: &GridProps) -> Html {
                         e.prevent_default();
                     })
                 };
-                let is_best = props.best_line_cells.map_or(false, |line| line.contains(&i));
+                let is_best = props.best_line_cells.is_some_and(|line| line.contains(&i));
                 let mut cell_class = vec!["cactpot-cell"];
                 if is_best { cell_class.push("cactpot-best-cell"); }
                 if value.is_some() { cell_class.push("cactpot-cell-revealed"); }

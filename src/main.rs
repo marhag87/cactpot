@@ -1,13 +1,12 @@
-mod logic;
 mod components;
+mod logic;
 
+use components::app_logic::{get_best_line_cells, prepare_rows, sort_rows};
+use components::grid::Grid;
+use components::payout_table::{PayoutTable, SortBy};
 use logic::NUM_CELLS;
 use logic::possible_line_payouts;
 use yew::prelude::*;
-use components::grid::Grid;
-use components::payout_table::{PayoutTable, SortBy};
-use components::app_logic::{prepare_rows, sort_rows, get_best_line_cells};
-
 
 #[function_component(App)]
 fn app() -> Html {
