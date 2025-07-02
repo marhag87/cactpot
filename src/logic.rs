@@ -61,30 +61,38 @@ pub fn payout_for_sum(sum: u8) -> u32 {
 pub fn possible_line_sums(board: &[Option<u8>; NUM_CELLS]) -> Vec<Vec<u8>> {
     let used: Vec<u8> = board.iter().filter_map(|&n| n).collect();
     let unused: Vec<u8> = (MIN_NUM..=MAX_NUM).filter(|n| !used.contains(n)).collect();
-    LINES.iter().map(|line| {
-        let mut known = vec![];
-        let mut unknown_indices = vec![];
-        for &idx in line {
-            match board[idx] {
-                Some(n) => known.push(n),
-                None => unknown_indices.push(idx),
+    LINES
+        .iter()
+        .map(|line| {
+            let mut known = vec![];
+            let mut unknown_indices = vec![];
+            for &idx in line {
+                match board[idx] {
+                    Some(n) => known.push(n),
+                    None => unknown_indices.push(idx),
+                }
             }
-        }
-        if unknown_indices.is_empty() {
-            // All known
-            return vec![known.iter().sum()];
-        }
-        // For each permutation of unused numbers of length unknown_indices.len(),
-        // assign them to the unknowns and compute the sum
-        let mut sums = vec![];
-        for combo in unused.iter().copied().permutations(unknown_indices.len()).unique() {
-            let sum: u8 = known.iter().copied().chain(combo.into_iter()).sum();
-            sums.push(sum);
-        }
-        sums.sort_unstable();
-        sums.dedup();
-        sums
-    }).collect()
+            if unknown_indices.is_empty() {
+                // All known
+                return vec![known.iter().sum()];
+            }
+            // For each permutation of unused numbers of length unknown_indices.len(),
+            // assign them to the unknowns and compute the sum
+            let mut sums = vec![];
+            for combo in unused
+                .iter()
+                .copied()
+                .permutations(unknown_indices.len())
+                .unique()
+            {
+                let sum: u8 = known.iter().copied().chain(combo.into_iter()).sum();
+                sums.push(sum);
+            }
+            sums.sort_unstable();
+            sums.dedup();
+            sums
+        })
+        .collect()
 }
 
 /// Given the current board state, return all possible payouts for each line.
@@ -93,4 +101,4 @@ pub fn possible_line_payouts(board: &[Option<u8>; NUM_CELLS]) -> Vec<Vec<u32>> {
         .into_iter()
         .map(|sums| sums.into_iter().map(payout_for_sum).collect())
         .collect()
-} 
+}

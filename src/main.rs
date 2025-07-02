@@ -1,8 +1,8 @@
 mod logic;
 
-use yew::prelude::*;
 use logic::NUM_CELLS;
 use logic::possible_line_payouts;
+use yew::prelude::*;
 
 const MIN_NUM: u8 = 1;
 const MAX_NUM: u8 = 9;
@@ -24,7 +24,9 @@ fn app() -> Html {
             let mut nums = (*numbers).clone();
             let current = nums[idx];
             let used: Vec<u8> = nums.iter().filter_map(|&n| n).collect();
-            let unused: Vec<u8> = (MIN_NUM..=MAX_NUM).filter(|n| !used.contains(n) || Some(*n) == current).collect();
+            let unused: Vec<u8> = (MIN_NUM..=MAX_NUM)
+                .filter(|n| !used.contains(n) || Some(*n) == current)
+                .collect();
             if unused.is_empty() {
                 return;
             }
@@ -94,24 +96,36 @@ fn app() -> Html {
     };
 
     // Prepare sortable data
-    let mut rows: Vec<(usize, String, u32, u32, f64)> = payouts.iter().enumerate().map(|(i, vals)| {
-        let avg = if vals.is_empty() { 0.0 } else { vals.iter().map(|&v| v as f64).sum::<f64>() / vals.len() as f64 };
-        let max = vals.iter().copied().max().unwrap_or(0);
-        let max_count = vals.iter().filter(|&&v| v == max).count();
-        let percent = if !vals.is_empty() && max > 0 { (max_count as f64 / vals.len() as f64) * 100.0 } else { 0.0 };
-        let line_label = match i {
-            0 => "Row 1",
-            1 => "Row 2",
-            2 => "Row 3",
-            3 => "Col 1",
-            4 => "Col 2",
-            5 => "Col 3",
-            6 => "Diag 1",
-            7 => "Diag 2",
-            _ => "",
-        };
-        (i, line_label.to_string(), avg.floor() as u32, max, percent)
-    }).collect();
+    let mut rows: Vec<(usize, String, u32, u32, f64)> = payouts
+        .iter()
+        .enumerate()
+        .map(|(i, vals)| {
+            let avg = if vals.is_empty() {
+                0.0
+            } else {
+                vals.iter().map(|&v| v as f64).sum::<f64>() / vals.len() as f64
+            };
+            let max = vals.iter().copied().max().unwrap_or(0);
+            let max_count = vals.iter().filter(|&&v| v == max).count();
+            let percent = if !vals.is_empty() && max > 0 {
+                (max_count as f64 / vals.len() as f64) * 100.0
+            } else {
+                0.0
+            };
+            let line_label = match i {
+                0 => "Row 1",
+                1 => "Row 2",
+                2 => "Row 3",
+                3 => "Col 1",
+                4 => "Col 2",
+                5 => "Col 3",
+                6 => "Diag 1",
+                7 => "Diag 2",
+                _ => "",
+            };
+            (i, line_label.to_string(), avg.floor() as u32, max, percent)
+        })
+        .collect();
 
     // Always sort descending
     let sort_by_val = *sort_by;
@@ -146,10 +160,10 @@ fn app() -> Html {
     let best_line_cells = best_line_indices.map(|idx| logic::LINES[idx]);
 
     html! {
-        <div class={classes!("cactpot-vertical-center")}> 
-            <div class={classes!("cactpot-flex")}> 
-                <div class={classes!("cactpot-grid-container")}> 
-                    <div class={classes!("cactpot-grid")}> 
+        <div class={classes!("cactpot-vertical-center")}>
+            <div class={classes!("cactpot-flex")}>
+                <div class={classes!("cactpot-grid-container")}>
+                    <div class={classes!("cactpot-grid")}>
                         { (0..NUM_CELLS).map(|i| {
                             let numbers = numbers.clone();
                             let on_wheel = on_wheel.clone();
@@ -193,8 +207,8 @@ fn app() -> Html {
                         }).collect::<Html>() }
                     </div>
                 </div>
-                <div class={classes!("cactpot-table-container")}> 
-                    <table class={classes!("cactpot-payout-table")}> 
+                <div class={classes!("cactpot-table-container")}>
+                    <table class={classes!("cactpot-payout-table")}>
                         <colgroup>
                             <col class="line" />
                             <col class="avg" />
@@ -204,10 +218,10 @@ fn app() -> Html {
                         <thead>
                             <tr>
                                 <th>{"Line"}</th>
-                                <th onclick={sort_by_avg} class={classes!("cactpot-sort-btn")}> 
+                                <th onclick={sort_by_avg} class={classes!("cactpot-sort-btn")}>
                                     {"Avg"}
                                 </th>
-                                <th onclick={sort_by_max} class={classes!("cactpot-sort-btn")}> 
+                                <th onclick={sort_by_max} class={classes!("cactpot-sort-btn")}>
                                     {"Max"}
                                 </th>
                                 <th>{"Max %"}</th>
