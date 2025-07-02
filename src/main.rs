@@ -15,27 +15,40 @@ fn app() -> Html {
             let mut nums = (*numbers).clone();
             let current = nums[idx];
             let used: Vec<u8> = nums.iter().filter_map(|&n| n).collect();
-            let mut next = match current {
-                Some(n) => n,
-                None => MIN_NUM - 1, // So scrolling up starts at 1
+            let unused: Vec<u8> = (MIN_NUM..=MAX_NUM).filter(|n| !used.contains(n) || Some(*n) == current).collect();
+            if unused.is_empty() {
+                return;
+            }
+            let next = match current {
+                Some(n) => {
+                    let pos = unused.iter().position(|&x| x == n).unwrap();
+                    if delta < 0 {
+                        // Scroll up: increment
+                        if pos + 1 < unused.len() {
+                            Some(unused[pos + 1])
+                        } else {
+                            Some(n) // At max, do nothing
+                        }
+                    } else {
+                        // Scroll down: decrement
+                        if pos > 0 {
+                            Some(unused[pos - 1])
+                        } else {
+                            Some(n) // At min, do nothing
+                        }
+                    }
+                }
+                None => {
+                    if delta < 0 {
+                        // Scroll up: set to lowest unused
+                        Some(*unused.iter().min().unwrap())
+                    } else {
+                        // Scroll down: set to highest unused
+                        Some(*unused.iter().max().unwrap())
+                    }
+                }
             };
-            let mut found = false;
-            for _ in 0..(MAX_NUM - MIN_NUM + 2) { // +2 to ensure wrap
-                if delta < 0 {
-                    // Scroll up: increment
-                    next = if next >= MAX_NUM { MIN_NUM } else { next + 1 };
-                } else {
-                    // Scroll down: decrement
-                    next = if next <= MIN_NUM { MAX_NUM } else { next - 1 };
-                }
-                if !used.contains(&next) || Some(next) == current {
-                    found = true;
-                    break;
-                }
-            }
-            if found {
-                nums[idx] = Some(next);
-            }
+            nums[idx] = next;
             numbers.set(nums);
         })
     };
