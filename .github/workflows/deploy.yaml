@@ -15,8 +15,13 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install Trunk
-        run: cargo install --locked trunk
+      - name: Install cargo-binstall
+        run: |
+          curl -LsSf https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-gnu.tar.gz | tar xz -C $HOME/.cargo/bin
+          chmod +x $HOME/.cargo/bin/cargo-binstall
+
+      - name: Install Trunk with cargo-binstall
+        run: cargo binstall --no-confirm trunk
 
       - name: Install wasm32 target
         run: rustup target add wasm32-unknown-unknown
