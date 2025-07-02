@@ -130,6 +130,14 @@ fn app() -> Html {
         })
     };
 
+    let highlight_best = filled_count == 4;
+    let best_line_indices = if highlight_best {
+        Some(rows[0].0)
+    } else {
+        None
+    };
+    let best_line_cells = best_line_indices.map(|idx| logic::LINES[idx]);
+
     html! {
         <div class={classes!("cactpot-flex")}> 
             <div>
@@ -163,8 +171,10 @@ fn app() -> Html {
                                 e.prevent_default();
                             })
                         };
+                        let is_best = best_line_cells.map_or(false, |line| line.contains(&i));
+                        let cell_class = if is_best { classes!("cactpot-cell", "cactpot-best-cell") } else { classes!("cactpot-cell") };
                         html! {
-                            <div class={classes!("cactpot-cell")}
+                            <div class={cell_class}
                                  tabindex="0"
                                  onwheel={onwheel}
                                  oncontextmenu={oncontextmenu}>
