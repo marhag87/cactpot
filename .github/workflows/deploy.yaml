@@ -9,8 +9,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       pages: write
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -36,8 +37,14 @@ jobs:
       - name: Build with Trunk
         run: trunk build --release --public-url /${{ github.event.repository.name }}/
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      - name: Setup pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+          with:
+            path: './dist'
+
+      - name: Deploy pages
+        id: deployment
+        uses: actions/deploy-pages@v4
