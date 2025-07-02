@@ -1,9 +1,12 @@
-mod models;
-mod solver;
+use yew::prelude::*;
 
-use models::Number;
-use solver::row_gil;
+#[function_component(App)]
+fn app() -> Html {
+    html! {
+        <h1>{ "Hello, world!" }</h1>
+    }
+}
 
 fn main() {
-    println!("{}", row_gil(vec![Number::One, Number::Two, Number::Three]));
+    yew::Renderer::<App>::new().render();
 }
