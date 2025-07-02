@@ -32,8 +32,10 @@ body {
     justify-content: center;
     align-items: center;
     box-shadow: 0 2px 8px #0002;
-    font-size: 1.5rem;
     cursor: pointer;
+    color: #b71c1c;
+    font-size: 2.5rem;
+    font-weight: bold;
 }
 
 .cactpot-vertical-center {
@@ -105,14 +107,4 @@ body {
 .cactpot-reset-btn:hover {
     background: #ffe599;
     color: #111;
-}
-
-.cactpot-cell-filled {
-    color: #b71c1c;
-    font-size: 2.5rem;
-    font-weight: bold;
-}
-
-.cactpot-cell-revealed {
-    background: #fff !important;
 }

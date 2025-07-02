@@ -182,14 +182,12 @@ fn app() -> Html {
                             let is_best = best_line_cells.map_or(false, |line| line.contains(&i));
                             let mut cell_class = vec!["cactpot-cell"];
                             if is_best { cell_class.push("cactpot-best-cell"); }
-                            if value.is_some() { cell_class.push("cactpot-cell-revealed"); }
-                            let number_class = if value.is_some() { Some("cactpot-cell-filled") } else { None };
                             html! {
                                 <div class={classes!(cell_class)}
                                      tabindex="0"
                                      onwheel={onwheel}
                                      oncontextmenu={oncontextmenu}>
-                                    <span class={number_class}>{ value.map(|n| n.to_string()).unwrap_or_default() }</span>
+                                    <span>{ value.map(|n| n.to_string()).unwrap_or_default() }</span>
                                 </div>
                             }
                         }).collect::<Html>() }
