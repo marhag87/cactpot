@@ -47,17 +47,11 @@ fn app() -> Html {
     // Prepare and sort table rows
     let rows = sort_rows(prepare_rows(&payouts), *sort_by);
 
-    // Handlers for sorting
-    let sort_by_avg = {
+    // Handler for sorting
+    let set_sort = {
         let sort_by = sort_by.clone();
-        Callback::from(move |_| {
-            sort_by.set(SortBy::Avg);
-        })
-    };
-    let sort_by_max = {
-        let sort_by = sort_by.clone();
-        Callback::from(move |_| {
-            sort_by.set(SortBy::Max);
+        Callback::from(move |sort: SortBy| {
+            sort_by.set(sort);
         })
     };
 
@@ -78,8 +72,7 @@ fn app() -> Html {
                     <PayoutTable
                         rows={rows.clone()}
                         sort_by={*sort_by}
-                        on_sort_avg={sort_by_avg.clone()}
-                        on_sort_max={sort_by_max.clone()}
+                        set_sort={set_sort.clone()}
                     />
                 </div>
             </div>

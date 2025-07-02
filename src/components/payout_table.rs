@@ -10,8 +10,7 @@ pub enum SortBy {
 pub struct PayoutTableProps {
     pub rows: Vec<(usize, String, u32, u32, f64)>,
     pub sort_by: SortBy,
-    pub on_sort_avg: Callback<MouseEvent>,
-    pub on_sort_max: Callback<MouseEvent>,
+    pub set_sort: Callback<SortBy>,
 }
 
 #[function_component(PayoutTable)]
@@ -26,16 +25,18 @@ pub fn payout_table(props: &PayoutTableProps) -> Html {
             </colgroup>
             <thead>
                 <tr>
-                    <th>{"Line"}</th>
-                    <th onclick={props.on_sort_avg.clone()} class={classes!("cactpot-sort-btn")}>
+                    <th>
+                        {"Line"}
+                    </th>
+                    <th onclick={props.set_sort.reform(|_| SortBy::Avg)} class={classes!("cactpot-sort-btn")}>
                         {"Avg"}
-                        { if props.sort_by == SortBy::Avg { " ↓" } else { "" } }
                     </th>
-                    <th onclick={props.on_sort_max.clone()} class={classes!("cactpot-sort-btn")}>
+                    <th onclick={props.set_sort.reform(|_| SortBy::Max)} class={classes!("cactpot-sort-btn")}>
                         {"Max"}
-                        { if props.sort_by == SortBy::Max { " ↓" } else { "" } }
                     </th>
-                    <th>{"Max %"}</th>
+                    <th>
+                        {"Max %"}
+                    </th>
                 </tr>
             </thead>
             <tbody>
