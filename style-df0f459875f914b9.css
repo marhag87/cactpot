@@ -1,0 +1,110 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #222;
+    min-height: 100vh;
+}
+
+.cactpot-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.cactpot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 64px);
+    grid-template-rows: repeat(3, 64px);
+    gap: 20px;
+}
+
+.cactpot-cell {
+    width: 64px;
+    height: 64px;
+    background: #f5e6c5;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px #0002;
+    cursor: pointer;
+    color: #b71c1c;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.cactpot-vertical-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.cactpot-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.cactpot-table-container {
+    max-width: 600px;
+}
+
+.cactpot-payout-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    background: #f5e6c5;
+    color: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #0002;
+}
+
+.cactpot-payout-table col.line { width: 80px; }
+.cactpot-payout-table col.avg { width: 120px; }
+.cactpot-payout-table col.max { width: 120px; }
+.cactpot-payout-table col.maxpct { width: 120px; }
+
+.cactpot-sort-btn {
+    cursor: pointer;
+}
+
+.cactpot-best-row {
+    background: #ffe599 !important;
+}
+
+.cactpot-best-cell {
+    box-shadow: 0 0 0 4px #4caf50, 0 2px 8px #0002;
+    z-index: 1;
+}
+
+.cactpot-grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cactpot-reset-btn {
+    background: #f5e6c5;
+    color: #222;
+    border: 2px solid #bfa76f;
+    border-radius: 6px;
+    padding: 0.5em 1.5em;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background 0.2s, color 0.2s;
+}
+.cactpot-reset-btn:hover {
+    background: #ffe599;
+    color: #111;
+}

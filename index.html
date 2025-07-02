@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Mini Cactpot Solver</title>
+    <link rel="stylesheet" href="/cactpot/style-df0f459875f914b9.css" integrity="sha384-qA/gsK4DLYTzaB8fj+nXR4kZQs5NZ/qe04dRaxEslFQDwhDsb9oWG/5IaNTQw2Q9"/>
+<link rel="modulepreload" href="/cactpot/cactpot-37fb2dc44924d127.js" crossorigin="anonymous" integrity="sha384-Ohoba7iviSHXyRPRXJvnbLEZi7MgPoxZNr/xcJOiXRu9f7RLhSbtn5x8YJdjQIRq"><link rel="preload" href="/cactpot/cactpot-37fb2dc44924d127_bg.wasm" crossorigin="anonymous" integrity="sha384-+Slf+qL1pmmjXfbFsIUUbBLwxM3RvX9S8AGMWLLYuQ07QI1ZfwpX1j3BD0wF9DBo" as="fetch" type="application/wasm"></head>
+<body>
+    <div id="root"></div>
+
+<script type="module">
+import init, * as bindings from '/cactpot/cactpot-37fb2dc44924d127.js';
+const wasm = await init({ module_or_path: '/cactpot/cactpot-37fb2dc44924d127_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+</html> 
