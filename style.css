@@ -1,6 +1,11 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background: #222;
-    margin: 0;
     min-height: 100vh;
 }
 
@@ -29,4 +34,39 @@ body {
     box-shadow: 0 2px 8px #0002;
     font-size: 1.5rem;
     font-weight: bold;
-} 
+}
+
+.cactpot-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cactpot-table-container {
+    max-width: 600px;
+}
+
+.cactpot-payout-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    background: #f5e6c5;
+    color: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #0002;
+}
+
+.cactpot-payout-table col.line { width: 80px; }
+.cactpot-payout-table col.avg { width: 120px; }
+.cactpot-payout-table col.max { width: 120px; }
+.cactpot-payout-table col.maxpct { width: 120px; }
+
+.cactpot-sort-btn {
+    cursor: pointer;
+}
