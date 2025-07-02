@@ -1,0 +1,32 @@
+body {
+    background: #222;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.cactpot-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.cactpot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 64px);
+    grid-template-rows: repeat(3, 64px);
+    gap: 20px;
+}
+
+.cactpot-cell {
+    width: 64px;
+    height: 64px;
+    background: #f5e6c5;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px #0002;
+    font-size: 1.5rem;
+    font-weight: bold;
+} 
