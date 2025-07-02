@@ -18,10 +18,10 @@ pub fn payout_table(props: &PayoutTableProps) -> Html {
     html! {
         <table class={classes!("cactpot-payout-table")}>
             <colgroup>
-                <col class="line" />
-                <col class="avg" />
-                <col class="max" />
-                <col class="maxpct" />
+                <col />
+                <col />
+                <col />
+                <col />
             </colgroup>
             <thead>
                 <tr>

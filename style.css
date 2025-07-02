@@ -2,18 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-}
-
-body {
     background: #222;
-    min-height: 100vh;
-}
-
-.cactpot-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
 .cactpot-grid {
@@ -55,7 +44,7 @@ body {
 }
 
 .cactpot-table-container {
-    max-width: 600px;
+    width: 400px;
 }
 
 .cactpot-payout-table {
@@ -68,17 +57,10 @@ body {
     box-shadow: 0 2px 8px #0002;
 }
 
-.cactpot-payout-table col.line { width: 80px; }
-.cactpot-payout-table col.avg { width: 120px; }
-.cactpot-payout-table col.max { width: 120px; }
-.cactpot-payout-table col.maxpct { width: 120px; }
+.cactpot-payout-table col { width: 100px; }
 
 .cactpot-sort-btn {
     cursor: pointer;
-}
-
-.cactpot-best-row {
-    background: #ffe599 !important;
 }
 
 .cactpot-best-cell {
@@ -104,7 +86,7 @@ body {
     margin-top: 1.5rem;
     transition: background 0.2s, color 0.2s;
 }
+
 .cactpot-reset-btn:hover {
     background: #ffe599;
-    color: #111;
 }
