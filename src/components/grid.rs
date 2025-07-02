@@ -29,7 +29,11 @@ pub fn grid(props: &GridProps) -> Html {
             }
             let next = match current {
                 Some(n) => {
-                    let pos = unused.iter().position(|&x| x == n).unwrap();
+                    let pos = if let Some(p) = unused.iter().position(|&x| x == n) {
+                        p
+                    } else {
+                        return;
+                    };
                     if delta < 0 {
                         // Scroll up: increment
                         if pos + 1 < unused.len() {
@@ -49,10 +53,18 @@ pub fn grid(props: &GridProps) -> Html {
                 None => {
                     if delta < 0 {
                         // Scroll up: set to lowest unused
-                        Some(*unused.iter().min().unwrap())
+                        if let Some(min) = unused.iter().min() {
+                            Some(*min)
+                        } else {
+                            return;
+                        }
                     } else {
                         // Scroll down: set to highest unused
-                        Some(*unused.iter().max().unwrap())
+                        if let Some(max) = unused.iter().max() {
+                            Some(*max)
+                        } else {
+                            return;
+                        }
                     }
                 }
             };
