@@ -49,6 +49,9 @@ fn app() -> Html {
         })
     };
 
+    let filled_count = numbers.iter().filter(|n| n.is_some()).count();
+    let max_inputs_reached = filled_count >= 4;
+
     html! {
         <div class={classes!("cactpot-center")}> 
             <div class={classes!("cactpot-grid")}> 
@@ -57,15 +60,30 @@ fn app() -> Html {
                     let on_wheel = on_wheel.clone();
                     let on_clear = on_clear.clone();
                     let value = numbers[i];
-                    let onwheel = Callback::from(move |e: web_sys::WheelEvent| {
-                        e.prevent_default();
-                        let delta = e.delta_y() as i32;
-                        on_wheel.emit((i, delta));
-                    });
-                    let oncontextmenu = Callback::from(move |e: web_sys::MouseEvent| {
-                        e.prevent_default();
-                        on_clear.emit(i);
-                    });
+                    let is_empty = value.is_none();
+                    let onwheel = if !max_inputs_reached || !is_empty {
+                        let on_wheel = on_wheel.clone();
+                        Callback::from(move |e: web_sys::WheelEvent| {
+                            e.prevent_default();
+                            let delta = e.delta_y() as i32;
+                            on_wheel.emit((i, delta));
+                        })
+                    } else {
+                        Callback::from(|e: web_sys::WheelEvent| {
+                            e.prevent_default();
+                        })
+                    };
+                    let oncontextmenu = if !max_inputs_reached || !is_empty {
+                        let on_clear = on_clear.clone();
+                        Callback::from(move |e: web_sys::MouseEvent| {
+                            e.prevent_default();
+                            on_clear.emit(i);
+                        })
+                    } else {
+                        Callback::from(|e: web_sys::MouseEvent| {
+                            e.prevent_default();
+                        })
+                    };
                     html! {
                         <div class={classes!("cactpot-cell")}
                              tabindex="0"
