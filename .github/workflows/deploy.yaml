@@ -26,6 +26,12 @@ jobs:
       - name: Install wasm32 target
         run: rustup target add wasm32-unknown-unknown
 
+      - name: Check formatting
+        run: cargo fmt --check
+
+      - name: Run clippy
+        run: cargo clippy -- -D warnings
+
       - name: Build with Trunk
         run: trunk build --release --public-url /${{ github.event.repository.name }}/
 
