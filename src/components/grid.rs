@@ -1,16 +1,15 @@
+use crate::{
+    components::payout_table::SortBy,
+    logic::{Board, MAX_NUM, MIN_NUM, NUM_CELLS},
+};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct GridProps {
-    pub numbers_handle: UseStateHandle<Vec<Option<u8>>>,
-    pub best_line_cells: Option<[usize; 3]>,
+    pub board_handle: UseStateHandle<Board>,
+    pub sort_by: SortBy,
     pub on_clear: Callback<usize>,
-    pub max_inputs_reached: bool,
 }
-
-const NUM_CELLS: usize = 9;
-const MIN_NUM: u8 = 1;
-const MAX_NUM: u8 = 9;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum ScrollDirection {
@@ -28,8 +27,9 @@ impl From<f64> for ScrollDirection {
     }
 }
 
-fn next_number(current: Option<u8>, direction: ScrollDirection, nums: &[Option<u8>]) -> Option<u8> {
-    let used = nums.iter().filter_map(|&n| n).collect::<Vec<u8>>();
+fn next_number(board: &Board, idx: usize, direction: ScrollDirection) -> Option<u8> {
+    let current = board.cells[idx];
+    let used = board.used();
     let unused = (MIN_NUM..=MAX_NUM)
         .filter(|n| !used.contains(n) || Some(*n) == current)
         .collect::<Vec<u8>>();
@@ -66,23 +66,27 @@ fn next_number(current: Option<u8>, direction: ScrollDirection, nums: &[Option<u
 
 #[function_component(Grid)]
 pub fn grid(props: &GridProps) -> Html {
-    let numbers = (*props.numbers_handle).clone();
+    let board = (*props.board_handle).clone();
+    let numbers = board.cells;
     let on_wheel = {
-        let numbers_handle = props.numbers_handle.clone();
+        let board_handle = props.board_handle.clone();
         Callback::from(move |(idx, direction): (usize, ScrollDirection)| {
-            let mut nums = (*numbers_handle).clone();
-            let next = next_number(nums[idx], direction, &nums);
-            nums[idx] = next;
-            numbers_handle.set(nums);
+            let mut board = (*board_handle).clone();
+            let next = next_number(&board, idx, direction);
+            board.cells[idx] = next;
+            board_handle.set(board);
         })
     };
+
+    let max_inputs_reached = board.max_inputs_reached();
+    let best_line_cells = board.best_line_cells(props.sort_by);
 
     html! {
         <div class={classes!("cactpot-grid")}>
             { (0..NUM_CELLS).map(|i| {
                 let value = numbers[i];
                 let has_value = value.is_some();
-                let max_inputs_reached = props.max_inputs_reached;
+                let max_inputs_reached = max_inputs_reached;
                 let onwheel = {
                     let on_wheel = on_wheel.clone();
                     Callback::from(move |e: web_sys::WheelEvent| {
@@ -102,7 +106,7 @@ pub fn grid(props: &GridProps) -> Html {
                         }
                     })
                 };
-                let is_best = props.best_line_cells.is_some_and(|line| line.contains(&i));
+                let is_best = best_line_cells.is_some_and(|line| line.contains(&i));
                 let mut class = classes!("cactpot-cell");
                 if is_best { class.push("cactpot-best-cell"); }
                 if has_value { class.push("cactpot-cell-revealed"); }

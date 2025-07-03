@@ -1,4 +1,4 @@
-use crate::components::app_logic::TableRow;
+use crate::logic::Board;
 use yew::prelude::*;
 
 #[derive(PartialEq, Eq, Clone, Copy)]
@@ -9,13 +9,16 @@ pub enum SortBy {
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct PayoutTableProps {
-    pub rows: Vec<TableRow>,
+    pub board_handle: UseStateHandle<Board>,
     pub sort_by: SortBy,
     pub set_sort: Callback<SortBy>,
 }
 
 #[function_component(PayoutTable)]
 pub fn payout_table(props: &PayoutTableProps) -> Html {
+    let board = (*props.board_handle).clone();
+    let rows = board.rows(props.sort_by);
+
     html! {
         <table class={classes!("cactpot-payout-table")}>
             <colgroup>
@@ -41,7 +44,7 @@ pub fn payout_table(props: &PayoutTableProps) -> Html {
                 </tr>
             </thead>
             <tbody>
-                { props.rows.iter().map(|row| {
+                { rows.iter().map(|row| {
                     html! {
                         <tr>
                             <td>{ &row.line_label }</td>

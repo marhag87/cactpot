@@ -1,5 +1,4 @@
 use crate::components::payout_table::SortBy;
-use crate::logic;
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct TableRow {
@@ -50,12 +49,4 @@ pub fn sort_rows(mut rows: Vec<TableRow>, sort_by: SortBy) -> Vec<TableRow> {
         ord.reverse()
     });
     rows
-}
-
-pub fn get_best_line_cells(rows: &[TableRow], filled_count: usize) -> Option<[usize; 3]> {
-    if filled_count == 4 {
-        Some(logic::LINES[rows[0].index])
-    } else {
-        None
-    }
 }
