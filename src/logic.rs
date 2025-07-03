@@ -59,8 +59,10 @@ pub fn payout_for_sum(sum: u8) -> u32 {
 
 /// Given the current board state, return all possible sums for each line.
 pub fn possible_line_sums(board: &[Option<u8>; NUM_CELLS]) -> Vec<Vec<u8>> {
-    let used: Vec<u8> = board.iter().filter_map(|&n| n).collect();
-    let unused: Vec<u8> = (MIN_NUM..=MAX_NUM).filter(|n| !used.contains(n)).collect();
+    let used = board.iter().filter_map(|&n| n).collect::<Vec<u8>>();
+    let unused = (MIN_NUM..=MAX_NUM)
+        .filter(|n| !used.contains(n))
+        .collect::<Vec<u8>>();
     LINES
         .iter()
         .map(|line| {

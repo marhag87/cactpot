@@ -15,18 +15,10 @@ pub fn prepare_rows(payouts: &[Vec<u32>]) -> Vec<TableRow> {
         .iter()
         .enumerate()
         .map(|(i, vals)| {
-            let avg = if vals.is_empty() {
-                0.0
-            } else {
-                vals.iter().map(|&v| v as f64).sum::<f64>() / vals.len() as f64
-            };
+            let avg = vals.iter().map(|&v| v as f64).sum::<f64>() / vals.len() as f64;
             let max = vals.iter().copied().max().unwrap_or(0);
             let max_count = vals.iter().filter(|&&v| v == max).count();
-            let percent = if !vals.is_empty() && max > 0 {
-                (max_count as f64 / vals.len() as f64) * 100.0
-            } else {
-                0.0
-            };
+            let percent = (max_count as f64 / vals.len() as f64) * 100.0;
             let line_label = match i {
                 0 => "Row 1",
                 1 => "Row 2",

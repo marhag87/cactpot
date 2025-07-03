@@ -62,7 +62,7 @@ fn app() -> Html {
             <div class={classes!("cactpot-flex")}>
                 <div class={classes!("cactpot-grid-container")}>
                     <Grid
-                        set_numbers={numbers.clone()}
+                        numbers_handle={numbers.clone()}
                         best_line_cells={best_line_cells}
                         on_clear={on_clear.clone()}
                         max_inputs_reached={max_inputs_reached}
