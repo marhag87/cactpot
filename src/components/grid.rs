@@ -87,7 +87,6 @@ pub fn grid(props: &GridProps) -> Html {
             { (0..NUM_CELLS).map(|i| {
                 let value = numbers[i];
                 let has_value = value.is_some();
-                let max_inputs_reached = max_inputs_reached;
                 let onwheel = {
                     let on_wheel = on_wheel.clone();
                     Callback::from(move |e: web_sys::WheelEvent| {

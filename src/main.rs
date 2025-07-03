@@ -9,7 +9,7 @@ use yew::prelude::*;
 #[function_component(App)]
 fn app() -> Html {
     // Handles
-    let board = use_state(|| Board::default());
+    let board = use_state(Board::default);
     let sort_by = use_state(|| SortBy::Max);
     let hovered_line_cells = use_state(|| None);
 
