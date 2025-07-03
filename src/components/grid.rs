@@ -9,6 +9,7 @@ pub struct GridProps {
     pub board_handle: UseStateHandle<Board>,
     pub sort_by: SortBy,
     pub on_clear: Callback<usize>,
+    pub hovered_line_cells: Option<[usize; 3]>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -107,8 +108,10 @@ pub fn grid(props: &GridProps) -> Html {
                     })
                 };
                 let is_best = best_line_cells.is_some_and(|line| line.contains(&i));
+                let is_hovered = props.hovered_line_cells.is_some_and(|line| line.contains(&i));
                 let mut class = classes!("cactpot-cell");
                 if is_best { class.push("cactpot-best-cell"); }
+                if is_hovered { class.push("cactpot-hovered-cell"); }
                 if has_value { class.push("cactpot-cell-revealed"); }
                 html! {
                     <div {class} tabindex="0" {onwheel} {oncontextmenu}>

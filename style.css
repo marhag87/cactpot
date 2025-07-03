@@ -89,6 +89,10 @@ body {
     z-index: 1;
 }
 
+.cactpot-hovered-cell {
+    background: #ffdd99;
+}
+
 .cactpot-grid-container {
     display: flex;
     flex-direction: column;

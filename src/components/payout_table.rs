@@ -1,4 +1,5 @@
 use crate::logic::Board;
+use crate::logic::LINES;
 use yew::prelude::*;
 
 #[derive(PartialEq, Eq, Clone, Copy)]
@@ -12,6 +13,7 @@ pub struct PayoutTableProps {
     pub board_handle: UseStateHandle<Board>,
     pub sort_by: SortBy,
     pub set_sort: Callback<SortBy>,
+    pub on_row_hover: Callback<Option<[usize; 3]>>,
 }
 
 #[function_component(PayoutTable)]
@@ -45,8 +47,17 @@ pub fn payout_table(props: &PayoutTableProps) -> Html {
             </thead>
             <tbody>
                 { rows.iter().map(|row| {
+                    let on_mouseenter = {
+                        let on_row_hover = props.on_row_hover.clone();
+                        let line = LINES[row.index];
+                        Callback::from(move |_| on_row_hover.emit(Some(line)))
+                    };
+                    let on_mouseleave = {
+                        let on_row_hover = props.on_row_hover.clone();
+                        Callback::from(move |_| on_row_hover.emit(None))
+                    };
                     html! {
-                        <tr>
+                        <tr onmouseenter={on_mouseenter} onmouseleave={on_mouseleave}>
                             <td>{ &row.line_label }</td>
                             <td>{ row.avg }</td>
                             <td>{ row.max }</td>

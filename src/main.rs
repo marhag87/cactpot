@@ -11,6 +11,7 @@ fn app() -> Html {
     // Handles
     let board = use_state(|| Board::default());
     let sort_by = use_state(|| SortBy::Max);
+    let hovered_line_cells = use_state(|| None);
 
     // Callbacks
     let on_clear = {
@@ -36,6 +37,13 @@ fn app() -> Html {
         })
     };
 
+    let on_row_hover = {
+        let hovered_line_cells = hovered_line_cells.clone();
+        Callback::from(move |cells: Option<[usize; 3]>| {
+            hovered_line_cells.set(cells);
+        })
+    };
+
     html! {
         <div class={classes!("cactpot-vertical-center")}>
             <div class={classes!("cactpot-flex")}>
@@ -44,6 +52,7 @@ fn app() -> Html {
                         board_handle={board.clone()}
                         sort_by={*sort_by}
                         on_clear={on_clear.clone()}
+                        hovered_line_cells={*hovered_line_cells}
                     />
                 </div>
                 <div class={classes!("cactpot-table-container")}>
@@ -51,6 +60,7 @@ fn app() -> Html {
                         board_handle={board.clone()}
                         sort_by={*sort_by}
                         set_sort={set_sort.clone()}
+                        on_row_hover={on_row_hover.clone()}
                     />
                 </div>
             </div>
